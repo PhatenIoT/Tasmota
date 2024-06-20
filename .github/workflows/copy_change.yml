@@ -3,7 +3,7 @@ name: Copy to docs repo
 on:
   workflow_dispatch:  # Manually start a workflow
   push:
-    branches: development
+    branches: main
     paths:
       - 'BUILDS.md'
       - 'I2CDEVICES.md'
@@ -22,7 +22,7 @@ jobs:
       with:
         source_file: 'I2CDEVICES.md'
         destination_repo: 'Tasmota/docs'
-        destination_branch: 'development'
+        destination_branch: 'main'
         destination_folder: 'docs'
         user_email: 'github-actions@github.com'
         user_name: 'github-actions'
@@ -34,7 +34,7 @@ jobs:
       with:
         source_file: 'BUILDS.md'
         destination_repo: 'Tasmota/docs'
-        destination_branch: 'development'
+        destination_branch: 'main'
         destination_folder: 'docs'
         user_email: 'github-actions@github.com'
         user_name: 'github-actions'
