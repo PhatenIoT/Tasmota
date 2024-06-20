@@ -1,10 +1,10 @@
 
-name: Build_development
+name: Build_main
 
 on:
   workflow_dispatch:      # Start a workflow
   push:
-    branches: development
+    branches: main
     paths-ignore:
     - '.github/**'        # Ignore changes towards the .github directory
     - '**.md'             # Do no build if *.md files changes
@@ -17,7 +17,7 @@ concurrency:
 jobs:
   be_solidify:
     runs-on: ubuntu-latest
-    if: github.repository == 'arendst/Tasmota' && github.ref_name == 'development'
+    if: github.repository == 'cheng5230/Tasmota' && github.ref_name == 'main'
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
   push_solidified:
     needs: be_solidify
     runs-on: ubuntu-latest
-    if: github.repository == 'arendst/Tasmota' && github.ref_name == 'development'
+    if: github.repository == 'cheng5230/Tasmota' && github.ref_name == 'main'
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -89,7 +89,7 @@ jobs:
   safeboot-images:
     needs: push_solidified
     runs-on: ubuntu-latest
-    if: github.repository == 'arendst/Tasmota'
+    if: github.repository == 'cheng5230/Tasmota'
     continue-on-error: true
     strategy:
       matrix:
@@ -108,7 +108,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: development
+          ref: main
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -137,7 +137,7 @@ jobs:
   base-images:
     needs: push_solidified
     runs-on: ubuntu-latest
-    if: github.repository == 'arendst/Tasmota'
+    if: github.repository == 'cheng5230/Tasmota'
     continue-on-error: true
     strategy:
       matrix:
@@ -155,7 +155,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: development
+          ref: main
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -180,7 +180,7 @@ jobs:
   base32-images:
     needs: safeboot-images
     runs-on: ubuntu-latest
-    if: github.repository == 'arendst/Tasmota'
+    if: github.repository == 'cheng5230/Tasmota'
     continue-on-error: true
     strategy:
       matrix:
@@ -203,7 +203,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: development
+          ref: main
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -234,7 +234,7 @@ jobs:
   language-images:
     needs: safeboot-images
     runs-on: ubuntu-latest
-    if: github.repository == 'arendst/Tasmota'
+    if: github.repository == 'cheng5230/Tasmota'
     continue-on-error: true
     strategy:
       matrix:
@@ -243,7 +243,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: development
+          ref: main
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -275,9 +275,9 @@ jobs:
     needs: [base-images, base32-images, language-images]
     runs-on: ubuntu-latest
     steps:
-    - name: Dispatch workflow in arendst/Tasmota-firmware
+    - name: Dispatch workflow in cheng5230/Tasmota-firmware
       run: |
-         curl -X POST https://api.github.com/repos/arendst/Tasmota-firmware/actions/workflows/fetch_deploy.yml/dispatches \
+         curl -X POST https://api.github.com/repos/cheng5230/Tasmota-firmware/actions/workflows/fetch_deploy.yml/dispatches \
          -H 'Accept: application/vnd.github.everest-preview+json' \
          -u ${{ secrets.API_TOKEN_GITHUB }} \
          --data '{"ref": "gh_actions"}'
